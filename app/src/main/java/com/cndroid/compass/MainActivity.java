@@ -8,7 +8,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
@@ -17,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager mSensorManager;
 
     Sensor mOrientationSensor;
-    private final float MAX_ROATE_DEGREE = 1.0f;
+    private final float MAX_ROTA_DEGREE = 1.0f;
     private AccelerateInterpolator mInterpolator;
 
 
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float mPitch, mTargetPitch;
     protected final Handler mHandler = new Handler();
 
-
-    float degree = 0;
     ExCompassView compassView;
 
     TextView textView;
@@ -39,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.app_name);
 
         mDirection = 0.0f;
         mTargetDirection = 0.0f;
@@ -126,29 +125,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     // limit the max speed to MAX_ROTATE_DEGREE
                     float distance = to - mDirection;
-                    if (Math.abs(distance) > MAX_ROATE_DEGREE) {
-                        distance = distance > 0 ? MAX_ROATE_DEGREE : (-1.0f * MAX_ROATE_DEGREE);
+                    if (Math.abs(distance) > MAX_ROTA_DEGREE) {
+                        distance = distance > 0 ? MAX_ROTA_DEGREE : (-1.0f * MAX_ROTA_DEGREE);
                     }
 
                     // need to slow down if the distance is short
-                    mDirection = normalizeDegree(mDirection + ((to - mDirection) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROATE_DEGREE ? 0.4f : 0.3f)));
+                    mDirection = normalizeDegree(mDirection + ((to - mDirection) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROTA_DEGREE ? 0.4f : 0.3f)));
 
 
                     to = mTargetPitch;
                     distance = to - mPitch;
-                    if (Math.abs(distance) > MAX_ROATE_DEGREE) {
-                        distance = distance > 0 ? MAX_ROATE_DEGREE : (-1.0f * MAX_ROATE_DEGREE);
+                    if (Math.abs(distance) > MAX_ROTA_DEGREE) {
+                        distance = distance > 0 ? MAX_ROTA_DEGREE : (-1.0f * MAX_ROTA_DEGREE);
                     }
 
-                    mPitch = mPitch + ((to - mPitch) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROATE_DEGREE ? 0.4f : 0.3f));
+                    mPitch = mPitch + ((to - mPitch) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROTA_DEGREE ? 0.4f : 0.3f));
 
                     to = mTargetRoll;
                     distance = to - mRoll;
-                    if (Math.abs(distance) > MAX_ROATE_DEGREE) {
-                        distance = distance > 0 ? MAX_ROATE_DEGREE : (-1.0f * MAX_ROATE_DEGREE);
+                    if (Math.abs(distance) > MAX_ROTA_DEGREE) {
+                        distance = distance > 0 ? MAX_ROTA_DEGREE : (-1.0f * MAX_ROTA_DEGREE);
                     }
 
-                    mRoll = mRoll + ((to - mRoll) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROATE_DEGREE ? 0.4f : 0.3f));
+                    mRoll = mRoll + ((to - mRoll) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROTA_DEGREE ? 0.4f : 0.3f));
 
 
                     compassView.updateDegree(mDirection, mPitch, mRoll);
