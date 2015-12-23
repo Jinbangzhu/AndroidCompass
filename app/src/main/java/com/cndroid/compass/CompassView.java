@@ -13,7 +13,7 @@ import android.view.View;
 /**
  * Created by jinbangzhu on 12/22/15.
  */
-public class ExCompassView extends View {
+public class CompassView extends View {
 
 
     private float mDegree = 0;
@@ -51,7 +51,7 @@ public class ExCompassView extends View {
     Path mPathDivision = new Path();
 
 
-    public ExCompassView(Context context) {
+    public CompassView(Context context) {
         super(context);
         init();
     }
@@ -108,12 +108,12 @@ public class ExCompassView extends View {
     }
 
 
-    public ExCompassView(Context context, AttributeSet attrs) {
+    public CompassView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ExCompassView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CompassView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -170,6 +170,7 @@ public class ExCompassView extends View {
             double cos = Math.cos(Math.toRadians(i - 90 + mDegree));
             double sin = Math.sin(Math.toRadians(i - 90 + mDegree));
 
+            // draw 0 30 60 90 120 ...
             if (i % 3 == 0) {
 
                 float lineFromX = (float) ((divisionRadius) * cos + centerX);
@@ -187,6 +188,7 @@ public class ExCompassView extends View {
             }
 
 
+            //  0 90 180 270
             if (i % 30 == 0) {
 
                 float labelX = (float) ((divisionRadius + labelWidth / 2) * cos + centerX);
@@ -217,6 +219,7 @@ public class ExCompassView extends View {
             }
 
 
+            // draw N W S E
             if (i % 90 == 0) {
 
                 float targetX = (float) ((divisionRadius - divisionLineWidth - labelFontSize) * cos + centerX);
@@ -229,13 +232,15 @@ public class ExCompassView extends View {
                 targetY += labelFontSize * (gapY / totalYHeight);
 
 
-                String label = i == 90 ? east : i == 180 ? south : i == 270 ? west : i == 0 ? north : null;
+                String label = i == 90 ? east : i == 180 ? south : i == 270 ? west : i == 0 ? north : "";
 
 
                 canvas.drawText(label, targetX, targetY, mPaintNSWE);
 
+
+                // TODO: 12/23/15  draw red triangle
+                // Draw red line for north
                 if (i == 0) {
-                    // Draw triangle
 
                     float fromX = (float) ((divisionRadius) * cos + centerX);
                     float fromY = (float) ((divisionRadius) * sin + centerY);
@@ -259,12 +264,9 @@ public class ExCompassView extends View {
         }
 
 
+        // draw big cross
         canvas.drawLine(centerX - bigCrossLineWidth, centerY, centerX + bigCrossLineWidth, centerY, mPaintCross);
         canvas.drawLine(centerX, centerY - bigCrossLineWidth, centerX, centerY + bigCrossLineWidth, mPaintCross);
-
-
-//        canvas.drawPath(mPathDivision, mPaintDivision);
-
 
         canvas.restore();
     }

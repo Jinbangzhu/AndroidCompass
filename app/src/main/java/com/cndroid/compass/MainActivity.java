@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -28,29 +27,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float mPitch, mTargetPitch;
     protected final Handler mHandler = new Handler();
 
-    ExCompassView compassView;
-
-    TextView textView;
+    CompassView compassView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.app_name);
-
         mDirection = 0.0f;
         mTargetDirection = 0.0f;
         mStopDrawing = true;
-        setContentView(R.layout.activity_main);
 
-        textView = (TextView) findViewById(R.id.tv_text);
-        compassView = (ExCompassView) findViewById(R.id.compass);
+        setContentView(R.layout.activity_main);
+        compassView = (CompassView) findViewById(R.id.compass);
 
         mInterpolator = new AccelerateInterpolator();
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
         mOrientationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
 
@@ -87,20 +80,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mTargetPitch = event.values[1];
         mTargetRoll = event.values[2];
         // Azimuth Pitch  Roll
-        String text = String.format("x = %f, y=%f, z=%f", mTargetDirection, mPitch, mRoll);
-        textView.setText(text);
-
-
+//        String sensorValue = String.format("x = %f, y=%f, z=%f", mTargetDirection, mPitch, mRoll);
+//        Log.d("sensorValue", "sensorValue = " + sensorValue);
     }
 
 
     private float normalizeDegree(float degree) {
         return (degree + 720) % 360;
     }
-
-    float[] mGravity;
-    float[] mGeomagnetic;
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -138,15 +125,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     if (Math.abs(distance) > MAX_ROTA_DEGREE) {
                         distance = distance > 0 ? MAX_ROTA_DEGREE : (-1.0f * MAX_ROTA_DEGREE);
                     }
-
                     mPitch = mPitch + ((to - mPitch) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROTA_DEGREE ? 0.4f : 0.3f));
+
 
                     to = mTargetRoll;
                     distance = to - mRoll;
                     if (Math.abs(distance) > MAX_ROTA_DEGREE) {
                         distance = distance > 0 ? MAX_ROTA_DEGREE : (-1.0f * MAX_ROTA_DEGREE);
                     }
-
                     mRoll = mRoll + ((to - mRoll) * mInterpolator.getInterpolation(Math.abs(distance) > MAX_ROTA_DEGREE ? 0.4f : 0.3f));
 
 
